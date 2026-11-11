@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Claim {{ item.claim_id }} · SatyaSetu{% endblock %}
+{% block content %}
+<section class="hero">
+  <a class="back" href="{{ url_for('run', job_id=job.id) }}">← Back to run #{{ job.id }}</a>
+  <p class="eyebrow">Synthetic claim</p>
+  <h1>{{ item.claim_id }}</h1>
+  <p><span class="badge {{ item.status|lower }}">{{ item.status }}</span> {{ item.policy_version }}</p>
+</section>
+<section class="panel">
+  <h2>Claim evidence</h2>
+  <dl class="stats">
+    <div><dt>Plan</dt><dd>{{ item.plan_id|default("Missing") }}</dd></div>
+    <div><dt>Service</dt><dd>{{ item.service_code|default("Missing") }}</dd></div>
+    <div><dt>Amount (cents)</dt><dd>{{ item.billed_cents|default("Missing") }}</dd></div>
+  </dl>
+  {% if item.quality_issues %}<p>Quality issues: {{ item.quality_issues|join(", ") }}</p>{% endif %}
+  {% for doc in evidence %}
+  <article class="ticket"><h3>{{ doc.title }}</h3><p>{{ doc.text }}</p><p class="caption">{{ doc.citation }}</p></article>
+  {% else %}<p>No policy rules flagged this record.</p>{% endfor %}
+  {% if item.status == "REVIEW" %}
+  <form method="post" action="{{ url_for('draft', job_id=job.id, claim_id=item.claim_id) }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}"><button>Create notification draft</button>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

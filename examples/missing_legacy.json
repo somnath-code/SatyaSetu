@@ -1,0 +1,14 @@
+{
+  "id": "BRFSS-MIGRATION-002",
+  "version": 1,
+  "type": "migration",
+  "title": "Move a legacy survey dashboard with missing architecture evidence",
+  "metric_definition": "Weighted diabetes prevalence by survey year and geography",
+  "output_grain": "survey_year,state_code",
+  "required_source_fields": [
+    "DIABETE4"
+  ],
+  "acceptance_criteria": [
+    "Reconcile against matching source snapshots"
+  ]
+}

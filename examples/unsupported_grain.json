@@ -1,0 +1,14 @@
+{
+  "id": "BRFSS-BI-001",
+  "version": 1,
+  "type": "report_change",
+  "title": "Publish a hospital-level diabetes dashboard",
+  "metric_definition": "Weighted survey prevalence by hospital",
+  "output_grain": "survey_year,hospital_id",
+  "required_source_fields": [
+    "hospital_id"
+  ],
+  "acceptance_criteria": [
+    "Show one row per hospital per year"
+  ]
+}

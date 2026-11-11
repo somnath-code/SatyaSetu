@@ -1,0 +1,24 @@
+[Unit]
+Description=SatyaSetu healthcare data portal
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=satyasetu
+Group=satyasetu
+WorkingDirectory=/opt/satyasetu/app
+EnvironmentFile=-/etc/satyasetu.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/satyasetu/venv/bin/satyasetu --repo /opt/satyasetu/app --state /var/lib/satyasetu --host 127.0.0.1 --port 8080
+Restart=on-failure
+TimeoutStopSec=25
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/satyasetu
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

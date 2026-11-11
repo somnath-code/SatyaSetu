@@ -1,0 +1,10 @@
+{
+  "id": "BRFSS-BI-002",
+  "version": 1,
+  "type": "report_change",
+  "title": "Extend a dashboard dependent on _RFHYPE6 to 2024",
+  "metric_definition": "An existing dashboard metric requires the _RFHYPE6 source field.",
+  "output_grain": "survey_year,state_code",
+  "required_source_fields": ["_RFHYPE6"],
+  "acceptance_criteria": ["Confirm a valid mapping and supported survey-year coverage."]
+}

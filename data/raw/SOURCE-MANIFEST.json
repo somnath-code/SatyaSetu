@@ -1,0 +1,42 @@
+[
+  {
+    "file": "LLCP2023XPT.zip",
+    "year": 2023,
+    "size_bytes": 93237818,
+    "sha256": "d1ab80e4806a1d07bd3e40ec78c971ad9ff920f3ea5f6049780aeaa41ff31f43",
+    "cdc_source": "https://www.cdc.gov/brfss/annual_data/annual_2023.html",
+    "members": [
+      "LLCP2023.XPT "
+    ]
+  },
+  {
+    "file": "codebook23_llcp-v2-508.zip",
+    "year": 2023,
+    "size_bytes": 85594,
+    "sha256": "948cb7cd58bddde96eab61ab11a93e69ef4440ff3b62f9382895a7403407df4a",
+    "cdc_source": "https://www.cdc.gov/brfss/annual_data/annual_2023.html",
+    "members": [
+      "USCODE23_LLCP_021924.HTML"
+    ]
+  },
+  {
+    "file": "LLCP2024XPT.zip",
+    "year": 2024,
+    "size_bytes": 83007956,
+    "sha256": "d33de91a584e866f657d29b1d5b51b5672467286ed22d021e36ee3c7b4d712a4",
+    "cdc_source": "https://www.cdc.gov/brfss/annual_data/annual_2024.html",
+    "members": [
+      "LLCP2024.XPT "
+    ]
+  },
+  {
+    "file": "codebook24_llcp-v2-508.zip",
+    "year": 2024,
+    "size_bytes": 71439,
+    "sha256": "06c1c0e9c384d70c5b204e7869b1b1ad3f402a37a730c1d9a1f5aeee94fd1918",
+    "cdc_source": "https://www.cdc.gov/brfss/annual_data/annual_2024.html",
+    "members": [
+      "USCODE24_LLCP_082125.HTML"
+    ]
+  }
+]

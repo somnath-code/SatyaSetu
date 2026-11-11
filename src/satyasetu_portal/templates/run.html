@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Run {{ job.id }} · SatyaSetu{% endblock %}
+{% block head %}{% if job.status in ("QUEUED", "RUNNING") %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <a class="back" href="{{ url_for('home') }}">← All workflows</a>
+  <p class="eyebrow">Run #{{ job.id }}</p>
+  <h1>{{ titles[job.kind] }}</h1>
+  <p><span class="badge {{ job.status|lower }}">{{ job.status }}</span> <a href="{{ url_for('artifact', job_id=job.id, filename='run.log') }}">Download run log</a></p>
+  {% if job.detail %}<p class="notice error">{{ job.detail }}</p>{% endif %}
+  {% if job.status in ("QUEUED", "RUNNING") %}<p>The page refreshes while the worker runs. You can return to it later from Run history.</p>{% endif %}
+</section>
+{% if result %}
+<section class="panel">
+  <h2>Run results</h2>
+  {% if job.kind == "assessment" %}
+    <p><strong>{{ result.verdict }}</strong> · {{ result.title }}</p>
+    {% if result.findings %}
+    <ul>{% for finding in result.findings %}<li><strong>{{ finding.role }}</strong> · {{ finding.message }}</li>{% endfor %}</ul>
+    {% endif %}
+  {% else %}
+    <dl class="stats">{% for key, value in result.items() %}<div><dt>{{ key }}</dt><dd>{{ value }}</dd></div>{% endfor %}</dl>
+  {% endif %}
+  {% if outputs %}
+  <h3>Download evidence</h3>
+  <div class="links">{% for filename in outputs %}<a href="{{ url_for('artifact', job_id=job.id, filename=filename) }}">{{ filename }}</a>{% endfor %}</div>
+  {% endif %}
+</section>
+{% endif %}
+{% if records %}
+<section class="panel space">
+  <h2>Claim outcomes</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Claim</th><th>Status</th><th>Reasons</th></tr></thead>
+    <tbody>{% for row in records %}
+    <tr><td><a href="{{ url_for('claim', job_id=job.id, claim_id=row.claim_id) }}">{{ row.claim_id }}</a></td><td><span class="badge {{ row.status|lower }}">{{ row.status }}</span></td><td>{{ (row.review_reasons or row.quality_issues)|join(", ") }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+</section>
+{% endif %}
+{% if tickets %}
+<section class="panel space">
+  <h2>{% if job.kind == "claims" %}Notification approvals{% else %}Review tickets{% endif %}</h2>
+  {% for item in tickets %}
+    {% if job.kind == "claims" %}
+      {% set reference = item.payload.id %}{% set state = item.state %}{% set title = item.payload.claim_id ~ " · " ~ (item.payload.rules|join(", ")) %}
+    {% else %}
+      {% set reference = item.id %}{% set state = item.status %}{% set title = item.role ~ " · " ~ item.title %}
+    {% endif %}
+    <article class="ticket">
+      <p><span class="badge">{{ state }}</span> <code>{{ reference }}</code></p>
+      <h3>{{ title }}</h3>
+      {% if state in ("PENDING_APPROVAL", "OPEN") %}
+      <form method="post" action="{{ url_for('review', job_id=job.id) }}" class="review-form">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <input type="hidden" name="reference" value="{{ reference }}">
+        <label>Reviewer <input name="reviewer" required maxlength="120"></label>
+        <label>Evidence or note <input name="note" required maxlength="1500"></label>
+        {% if job.kind != "claims" %}
+        <label>Decision <select name="decision"><option>APPROVED</option><option>CHANGES_REQUESTED</option><option>REJECTED</option></select></label>
+        {% endif %}
+        <button>{% if job.kind == "claims" %}Approve notice{% else %}Record decision{% endif %}</button>
+      </form>
+      {% else %}<p class="caption">{{ item.reviewer or item.actor or "" }} {{ item.note or "" }}</p>{% endif %}
+      {% if item.notification %}<p class="caption">Delivery: {{ item.notification }}</p>{% endif %}
+    </article>
+  {% endfor %}
+  {% if preview %}<details><summary>Preview approved payloads</summary><pre>{{ preview|tojson(indent=2) }}</pre></details>{% endif %}
+  {% if (job.kind == "claims" and claims_configured and preview) or (job.kind != "claims" and survey_configured) %}
+  <form method="post" action="{{ url_for('notify', job_id=job.id) }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button>Send to configured Logic App</button>
+  </form>
+  {% else %}
+  <p class="caption">Configure the corresponding Logic App to deliver notifications.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

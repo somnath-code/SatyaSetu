@@ -1,0 +1,27 @@
+/.venv/
+/out/
+/data/raw/*
+/data/work/
+*.xpt
+*.XPT
+*.zip
+*.parquet
+*.sqlite*
+.env
+.env.*
+!.env.example
+.databrickscfg
+.databricks/
+__pycache__/
+*.egg-info/
+build/
+dist/
+
+# Public CDC inputs bundled with the full release
+!/data/raw/README.md
+!/data/raw/SOURCE-MANIFEST.json
+!/data/raw/LLCP2023XPT.zip
+!/data/raw/LLCP2024XPT.zip
+!/data/raw/codebook23_llcp-v2-508.zip
+!/data/raw/codebook24_llcp-v2-508.zip
+data/raw/*.zip

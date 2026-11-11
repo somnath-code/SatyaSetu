@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "request_id",
+    "version",
+    "role",
+    "code"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^BR-[0-9a-f]{16}$"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "role": {
+      "enum": [
+        "BI_BA",
+        "ARCHITECT",
+        "DEVELOPER",
+        "TESTER"
+      ]
+    },
+    "code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    }
+  }
+}

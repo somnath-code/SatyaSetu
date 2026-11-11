@@ -1,0 +1,26 @@
+{
+  "dataset": "BRFSS annual public survey",
+  "target_architecture": "SAS XPT projection to staging, PySpark survey fact, Delta dimensions and Gold BI metrics",
+  "field_mapping": {
+    "_STATE": "state_code INT",
+    "DIABETE4": "diabetes_response_code INT",
+    "_LLCPWT": "final_weight DECIMAL(24,8)",
+    "_STSTR": "stratum BIGINT",
+    "_PSU": "primary_sampling_unit BIGINT"
+  },
+  "fact_grain": "one response per survey interview per source snapshot",
+  "fact_key": [
+    "survey_year",
+    "source_row"
+  ],
+  "supported_output_grains": [
+    "survey_year,state_code"
+  ],
+  "available_source_fields": [
+    "_STATE",
+    "DIABETE4",
+    "_LLCPWT",
+    "_STSTR",
+    "_PSU"
+  ]
+}

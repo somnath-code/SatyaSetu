@@ -1,0 +1,26 @@
+services:
+  portal:
+    build: .
+    init: true
+    restart: unless-stopped
+    environment:
+      SATYASETU_PASSWORD: ${SATYASETU_PASSWORD:?Set SATYASETU_PASSWORD in .env}
+      LOGIC_APP_CALLBACK_URL: ${LOGIC_APP_CALLBACK_URL:-}
+      CLAIMS_LOGIC_APP_CALLBACK_URL: ${CLAIMS_LOGIC_APP_CALLBACK_URL:-}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - portal_state:/state
+      - ./data/raw:/app/data/raw:ro
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 25s
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=2).close()"]
+      interval: 20s
+      timeout: 4s
+      retries: 5
+volumes:
+  portal_state:

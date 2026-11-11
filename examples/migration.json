@@ -1,0 +1,38 @@
+{
+  "id": "BRFSS-MIGRATION-001",
+  "version": 1,
+  "type": "migration",
+  "title": "Migrate the weighted diabetes dashboard to Databricks",
+  "metric_definition": "100 × sum(weight for code 1) / sum(weight for codes 1, 2, 3, 4), restricted to positive weights",
+  "output_grain": "survey_year,state_code",
+  "required_source_fields": [
+    "_STATE",
+    "DIABETE4",
+    "_LLCPWT",
+    "_STSTR",
+    "_PSU"
+  ],
+  "acceptance_criteria": [
+    "Reconcile row, eligible and case counts by survey year and geography",
+    "Match weighted sums exactly after staging to eight decimal places",
+    "Exclude responses 7 and 9"
+  ],
+  "legacy": {
+    "architecture": "Simulated annual flat survey files, batch Python aggregation and a geography dashboard",
+    "model": {
+      "grain": "one response per survey interview per source snapshot",
+      "key": [
+        "survey_year",
+        "source_row"
+      ],
+      "fields": [
+        "_STATE",
+        "DIABETE4",
+        "_LLCPWT",
+        "_STSTR",
+        "_PSU"
+      ]
+    },
+    "baseline": "Independent Python reference reads the same staged snapshot as the target"
+  }
+}

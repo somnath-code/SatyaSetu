@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "kind",
+    "claim_id",
+    "policy_version",
+    "rules"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^CL-[a-f0-9]{16}$"
+    },
+    "kind": {
+      "const": "claim_review"
+    },
+    "claim_id": {
+      "type": "string"
+    },
+    "policy_version": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "COVERAGE",
+          "HIGH_AMOUNT",
+          "LATE_FILING",
+          "REPEAT_ENCOUNTER"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"query":"COVERAGE","expect":"COVERAGE"}
+{"query":"30 calendar days","expect":"LATE_FILING"}
+{"query":"threshold 100000 cents","expect":"HIGH_AMOUNT"}
+{"query":"REPEAT_ENCOUNTER","expect":"REPEAT_ENCOUNTER"}

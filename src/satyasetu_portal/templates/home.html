@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">Healthcare data assurance</p>
+  <h1>Migration & claims review</h1>
+  <p>Reconcile BRFSS survey metrics or explain why a synthetic claim needs review. Both workflows save their evidence and reviewer decisions.</p>
+</section>
+<div class="grid">
+  <section class="panel">
+    <p class="eyebrow">Survey migration</p>
+    <h2>Reconcile the dashboard</h2>
+    <p>Compare the legacy calculation with PySpark using the same survey snapshot.</p>
+    <form method="post" action="{{ url_for('launch') }}" class="actions">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button name="kind" value="survey_fixture" class="secondary">Run small fixture</button>
+      <button name="kind" value="survey_full" {% if not full %}disabled{% endif %}>Run 2023–2024 BRFSS</button>
+    </form>
+    <p class="caption">{% if full %}Both survey archives and codebooks are available.{% else %}Place the four CDC archives in data/raw to run the full comparison.{% endif %}</p>
+  </section>
+  <section class="panel">
+    <p class="eyebrow">Claims intelligence</p>
+    <h2>Review synthetic claims</h2>
+    <p>Run Bronze, Silver, and Gold checks, inspect policy citations, and approve notification drafts.</p>
+    <form method="post" action="{{ url_for('launch') }}" class="actions">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button name="kind" value="claims">Run claims review</button>
+    </form>
+    <p class="caption">Seven bundled claims and a fictional insurance policy.</p>
+  </section>
+</div>
+<section class="panel space">
+  <h2>Assess a migration requirement</h2>
+  <p>Start with the sample JSON. Select a completed survey run to check the request against its observed source fields.</p>
+  <form method="post" action="{{ url_for('launch') }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="kind" value="assessment">
+    <label for="requirement">Requirement JSON</label>
+    <textarea id="requirement" name="requirement" rows="8" required spellcheck="false">{{ sample }}</textarea>
+    <label for="manifest">Schema evidence</label>
+    <select id="manifest" name="manifest_id">
+      <option value="">Target catalog only</option>
+      {% for row in manifests %}<option value="{{ row.id }}">#{{ row.id }} · {{ titles[row.kind] }}</option>{% endfor %}
+    </select>
+    <button>Assess requirement</button>
+  </form>
+</section>
+<section class="panel space" id="activity">
+  <h2>Recent runs</h2>
+  {% if jobs %}
+  <div class="scroll"><table>
+    <thead><tr><th>Run</th><th>Workflow</th><th>Status</th><th>Started (UTC)</th></tr></thead>
+    <tbody>
+    {% for row in jobs %}
+      <tr><td><a href="{{ url_for('run', job_id=row.id) }}">#{{ row.id }}</a></td><td>{{ titles[row.kind] }}</td><td><span class="badge {{ row.status|lower }}">{{ row.status }}</span></td><td>{{ row.created }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="caption">Your first run will appear here.</p>{% endif %}
+</section>
+{% endblock %}

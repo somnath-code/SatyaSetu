@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "satyasetu"
+version = "0.3.0"
+description = "Healthcare survey migration assurance and synthetic claims intelligence"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+local = ["pyspark==4.0.1", "pandas>=2.2,<3"]
+
+portal = ["flask>=3.1,<4", "waitress>=3,<4"]
+
+[project.scripts]
+satyasetu = "satyasetu_portal.web:main"
+brfss = "brfss_assurance.cli:main"
+claims = "healthcare.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"healthcare.notifications" = ["payload_schema.json"]
+
+"satyasetu_portal" = ["templates/*.html", "static/*.css"]
