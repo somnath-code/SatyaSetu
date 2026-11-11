@@ -24,4 +24,3 @@ dist/
 !/data/raw/LLCP2024XPT.zip
 !/data/raw/codebook23_llcp-v2-508.zip
 !/data/raw/codebook24_llcp-v2-508.zip
-data/raw/*.zip
